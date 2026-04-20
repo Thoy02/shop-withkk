@@ -59,12 +59,74 @@
         .result-total { font-size: 1.3rem; font-weight: 700; color: #F09B5C; }
         .calc-btn { background: #E25E3A; color: white; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer; font-weight: 600; }
         .calc-btn:hover { background: #c44e2c; }
-        .custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; border-radius: 28px; padding: 28px; width: 90%; max-width: 320px; text-align: center; animation: fadeIn 0.2s ease; }
-        .modal-content input { width: 100%; padding: 14px; margin: 20px 0; border-radius: 30px; border: 1px solid #ddd; font-size: 1rem; }
-        .modal-content button { background: #E25E3A; color: white; border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; cursor: pointer; margin: 5px; }
-        .modal-content button.cancel { background: #ccc; color: #333; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        /* 自定义弹窗样式 */
+        .custom-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2e241f;
+            color: #F09B5C;
+            padding: 14px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            z-index: 2000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+            text-align: center;
+            white-space: nowrap;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(30px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        .custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            padding: 28px;
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
+            animation: fadeIn 0.2s ease;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 14px;
+            margin: 20px 0;
+            border-radius: 30px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+        .modal-content button {
+            background: #E25E3A;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .modal-content button.cancel {
+            background: #ccc;
+            color: #333;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
         .country-showcase { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 30px 0; }
         .country-card { background: white; width: 150px; padding: 16px 8px; text-align: center; border-radius: 28px; cursor: pointer; border: 1px solid #ffe2d4; }
         .country-card.active-country { border: 2px solid #E25E3A; background: #fff3ec; }
@@ -93,6 +155,7 @@
             .country-card { width: 130px; }
             .goods-item { flex-direction: column; text-align: center; }
             .calc-row { flex-direction: column; }
+            .custom-toast { white-space: normal; width: 80%; text-align: center; font-size: 0.9rem; }
         }
         @media (max-width: 480px) {
             .badge { font-size: 0.75rem; padding: 4px 12px; }
@@ -468,6 +531,19 @@
     let currentCountry = 'japan';
     let isAdmin = false;
 
+    // 显示自定义提示（底部弹窗，不打断操作）
+    function showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.style.backgroundColor = isError ? '#8B3A3A' : '#2e241f';
+        toast.style.color = '#F09B5C';
+        toast.innerText = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.remove();
+        }, 2500);
+    }
+
     // 计算器函数
     function calculatePrice() {
         let productPrice = parseFloat(document.getElementById('productPrice').value) || 0;
@@ -475,14 +551,12 @@
         let handlingFee = document.getElementById('handlingFeeCheckbox').checked ? 10 : 0;
         let shippingFee = document.getElementById('shippingFeeCheckbox').checked ? (parseFloat(document.getElementById('shippingFee').value) || 0) : 0;
         
-        // 代购费 = 20%，最低 RM15
         let serviceFee = productPrice * 0.2;
         if (serviceFee < 15) serviceFee = 15;
         
         let customerTotal = productPrice + serviceFee + travelFee + handlingFee + shippingFee;
         let yourEarn = productPrice + serviceFee + travelFee + handlingFee;
         
-        // 更新显示
         document.getElementById('resultPrice').innerText = 'RM ' + productPrice.toFixed(2);
         document.getElementById('resultServiceFee').innerText = 'RM ' + serviceFee.toFixed(2);
         document.getElementById('resultTravelFee').innerText = 'RM ' + travelFee.toFixed(2);
@@ -492,12 +566,10 @@
         document.getElementById('resultYourEarn').innerText = 'RM ' + yourEarn.toFixed(2);
     }
     
-    // 显示/隐藏邮费输入框
     document.getElementById('shippingFeeCheckbox').addEventListener('change', function() {
         document.getElementById('shippingFeeRow').style.display = this.checked ? 'flex' : 'none';
         calculatePrice();
     });
-    
     document.getElementById('handlingFeeCheckbox').addEventListener('change', calculatePrice);
     document.getElementById('productPrice').addEventListener('input', calculatePrice);
     document.getElementById('travelFee').addEventListener('change', calculatePrice);
@@ -572,10 +644,12 @@
                 el.classList.add('show');
             });
             hideAdminModal();
-            calculatePrice(); // 初始化计算器显示
-            alert(currentLang === 'zh' ? "Admin 模式已开启，你现在可以看到完整利润信息和报价计算器" : "Admin mode enabled. You can now see profit details and calculator.");
+            calculatePrice();
+            // 使用自定义弹窗代替 alert
+            showToast(currentLang === 'zh' ? '✅ Admin 模式已开启' : '✅ Admin mode enabled');
         } else {
-            alert(currentLang === 'zh' ? "密码错误" : "Wrong password");
+            showToast(currentLang === 'zh' ? '❌ 密码错误' : '❌ Wrong password', true);
+            document.getElementById('adminPassword').value = '';
         }
     }
 
