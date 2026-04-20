@@ -348,7 +348,24 @@
             no_intl_fee: "✈️ 人肉代购免国际运费！",
             form_title: "📋 询价 / 下单", form_desc: "📩 直接私讯我，我会在24小时内回复报价",
             form_alternative: "或者 WhatsApp: 012-3456789 (你的号码)",
-            footer_wa: "WhatsApp", footer_fee: "收费政策", footer_copy: "© 2025 shop_withkk 代购 | 人肉亲自带回 · 透明无隐藏费用"
+            footer_wa: "WhatsApp", footer_fee: "收费政策", footer_copy: "© 2025 shop_withkk 代购 | 人肉亲自带回 · 透明无隐藏费用",
+            goods_japan: [
+                {name: "🇯🇵 药妆面膜", price: "约 ¥700-1200"},
+                {name: "🇯🇵 龙角散润喉糖", price: "约 ¥500"},
+                {name: "🇯🇵 宇治抹茶零食", price: "¥800-1500"}
+            ],
+            goods_korea: [
+                {name: "🇰🇷 热门面膜", price: "₩15,000"},
+                {name: "🇰🇷 小众香膏", price: "₩12,000"}
+            ],
+            goods_thai: [
+                {name: "🇹🇭 鼻通棒", price: "฿180"},
+                {name: "🇹🇭 牛奶洗面奶", price: "฿139"}
+            ],
+            goods_head_japan: "✨ 日本东京 热门代购",
+            goods_head_korea: "✨ 韩国首尔 人气商品",
+            goods_head_thai: "✨ 泰国曼谷 必买清单",
+            goods_fee_note: "💬 代购费 = 商品价 × 20%（最低RM15）"
         },
         en: {
             nav_home: "Home", nav_trips: "Trips", nav_fees: "Pricing", nav_quote: "Quote",
@@ -365,23 +382,72 @@
             no_intl_fee: "✈️ No international shipping fee!",
             form_title: "📋 Inquiry", form_desc: "📩 DM me on Instagram, reply within 24h",
             form_alternative: "Or WhatsApp: 012-3456789",
-            footer_wa: "WhatsApp", footer_fee: "Pricing", footer_copy: "© 2025 shop_withkk | Transparent pricing"
+            footer_wa: "WhatsApp", footer_fee: "Pricing", footer_copy: "© 2025 shop_withkk | Transparent pricing",
+            goods_japan: [
+                {name: "🇯🇵 Sheet Mask", price: "~¥700-1200"},
+                {name: "🇯🇵 Herbal Candy", price: "~¥500"},
+                {name: "🇯🇵 Matcha Snacks", price: "¥800-1500"}
+            ],
+            goods_korea: [
+                {name: "🇰🇷 Hydrating Mask", price: "₩15,000"},
+                {name: "🇰🇷 Perfume Balm", price: "₩12,000"}
+            ],
+            goods_thai: [
+                {name: "🇹🇭 Nasal Stick", price: "~฿180"},
+                {name: "🇹🇭 Milk Cleanser", price: "฿139"}
+            ],
+            goods_head_japan: "✨ Tokyo: Popular picks",
+            goods_head_korea: "✨ Seoul: Trending items",
+            goods_head_thai: "✨ Bangkok: Must-buys",
+            goods_fee_note: "💬 Service fee = 20% of item price (min RM15)"
         }
     };
     let currentLang = 'zh';
+    let activeCountry = 'japan';
+
+    function renderGoods() {
+        const t = translations[currentLang];
+        const data = t['goods_' + activeCountry];
+        if (!data) return;
+        const container = document.getElementById('goodsList');
+        const heading = t['goods_head_' + activeCountry] || '';
+        let html = '<h3>' + heading + '</h3>';
+        data.forEach(function(item) {
+            html += '<div class="goods-item"><span>' + item.name + '</span><span>' + item.price + '</span></div>';
+        });
+        html += '<p style="margin-top:12px;">' + t.goods_fee_note + '</p>';
+        container.innerHTML = html;
+    }
+
     function updateLanguage(lang) {
         currentLang = lang;
-        document.querySelectorAll('[data-i18n]').forEach(el => {
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
             const key = el.getAttribute('data-i18n');
-            if(translations[lang][key]) el.innerText = translations[lang][key];
+            if (translations[lang][key]) el.innerText = translations[lang][key];
         });
-        document.querySelectorAll('.lang-btn').forEach(btn => {
+        document.querySelectorAll('.lang-btn').forEach(function(btn) {
             btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
         });
+        renderGoods();
     }
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => updateLanguage(btn.getAttribute('data-lang')));
+
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            updateLanguage(btn.getAttribute('data-lang'));
+        });
     });
+
+    document.querySelectorAll('.country-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+            document.querySelectorAll('.country-card').forEach(function(c) {
+                c.classList.remove('active-country');
+            });
+            card.classList.add('active-country');
+            activeCountry = card.getAttribute('data-country');
+            renderGoods();
+        });
+    });
+
     updateLanguage('zh');
 </script>
 </body>
