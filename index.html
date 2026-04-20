@@ -59,8 +59,9 @@
         .goods-price { color: #E25E3A; font-weight: 600; font-size: 0.85rem; background: #fff0e6; padding: 4px 12px; border-radius: 30px; }
         .quote-form { background: white; border-radius: 28px; padding: 24px; margin: 32px 0; text-align: center; }
         .ig-button { background: #E25E3A; color: white; padding: 12px 24px; border-radius: 50px; text-decoration: none; font-weight: 700; display: inline-block; margin-top: 16px; }
-        .whatsapp-link { color: #E25E3A; text-decoration: none; font-weight: 600; }
+        .whatsapp-link { display: inline-block; color: #E25E3A; text-decoration: none; font-weight: 600; }
         .whatsapp-link:hover { text-decoration: underline; }
+        .contact-row { margin-top: 16px; }
         footer { background: #2e241f; color: #d9cfc5; padding: 32px 0; margin-top: 48px; text-align: center; font-size: 0.85rem; }
         .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 16px; flex-wrap: wrap; }
         .footer-links a { color: #f0cfbc; text-decoration: none; }
@@ -241,11 +242,10 @@
             <div class="quote-form">
                 <p data-i18n="quote_desc">📩 直接私讯我，我会在24小时内回复报价</p>
                 <a href="https://instagram.com/shop_withkk" target="_blank" class="ig-button" data-i18n="quote_btn">📱 私讯 Instagram @shop_withkk</a>
-                <p style="margin-top: 16px;" data-i18n="quote_wa">
-                    或者 
-                    <a href="https://wa.me/60124397307?text=Hi%20shop_withkk%2C%20我想询价代购商品" target="_blank" class="whatsapp-link" data-i18n="whatsapp_text">📲 WhatsApp: 012-4397307</a>
-                    <span data-i18n="whatsapp_hint">（点击直接聊天）</span>
-                </p>
+                <div class="contact-row">
+                    <span data-i18n="quote_or">或者 </span>
+                    <a href="https://wa.me/60124397307?text=Hi%20shop_withkk%2C%20我想询价代购商品" target="_blank" class="whatsapp-link" data-i18n="whatsapp_full">📲 WhatsApp: 012-4397307（点击直接聊天）</a>
+                </div>
             </div>
         </div>
     </section>
@@ -359,9 +359,9 @@
             trips_title: "🗺️ 当期代购 · 日本东京", trips_date: "2025.04.20 - 2025.04.28",
             country_japan: "日本 · 东京", country_japan_status: "进行中", country_korea: "韩国 · 首尔", country_korea_status: "即将开放", country_thai: "泰国 · 曼谷", country_thai_status: "即将开放",
             goods_note: "* 当地价格抵达后实拍确认，代购费另计。先付款后购买，不退还。",
-            quote_title: "📋 询价 / 下单", quote_desc: "📩 直接私讯我，我会在24小时内回复报价", quote_btn: "📱 私讯 Instagram @shop_withkk", quote_wa: "或者 📲 WhatsApp: 012-4397307（点击直接聊天）",
-            whatsapp_text: "📲 WhatsApp: 012-4397307",
-            whatsapp_hint: "（点击直接聊天）",
+            quote_title: "📋 询价 / 下单", quote_desc: "📩 直接私讯我，我会在24小时内回复报价", quote_btn: "📱 私讯 Instagram @shop_withkk",
+            quote_or: "或者 ",
+            whatsapp_full: "📲 WhatsApp: 012-4397307（点击直接聊天）",
             footer_ig: "Instagram", footer_wa: "WhatsApp", footer_fee: "收费政策", footer_copy: "© 2025 shop_withkk 代购 | 亲自带回 · 透明收费 · 付款后购买 · 不退还",
             modal_title: "🔐 Admin 验证", modal_desc: "请输入密码以查看完整利润信息", modal_confirm: "确认", modal_cancel: "取消"
         },
@@ -391,9 +391,9 @@
             trips_title: "🗺️ Current Trip · Tokyo, Japan", trips_date: "Apr 20 - 28, 2025",
             country_japan: "Tokyo, Japan", country_japan_status: "Ongoing", country_korea: "Seoul, Korea", country_korea_status: "Coming Soon", country_thai: "Bangkok, Thailand", country_thai_status: "Coming Soon",
             goods_note: "* Final price confirmed in-store, service fee extra. Pay first, no refunds.",
-            quote_title: "📋 Inquiry / Order", quote_desc: "📩 DM me, I'll reply within 24h with a quote", quote_btn: "📱 DM Instagram @shop_withkk", quote_wa: "Or 📲 WhatsApp: 012-4397307 (click to chat)",
-            whatsapp_text: "📲 WhatsApp: 012-4397307",
-            whatsapp_hint: "(click to chat)",
+            quote_title: "📋 Inquiry / Order", quote_desc: "📩 DM me, I'll reply within 24h with a quote", quote_btn: "📱 DM Instagram @shop_withkk",
+            quote_or: "Or ",
+            whatsapp_full: "📲 WhatsApp: 012-4397307 (click to chat)",
             footer_ig: "Instagram", footer_wa: "WhatsApp", footer_fee: "Pricing Policy", footer_copy: "© 2025 shop_withkk | Hand-carried · Transparent · Pay first · No refunds",
             modal_title: "🔐 Admin Verification", modal_desc: "Enter password to view profit details", modal_confirm: "Confirm", modal_cancel: "Cancel"
         }
@@ -411,6 +411,8 @@
                 if (el.tagName === 'INPUT' && el.getAttribute('placeholder')) {
                     el.placeholder = t[key];
                 } else if (el.tagName === 'BUTTON') {
+                    el.innerHTML = t[key];
+                } else if (el.tagName === 'A' && el.getAttribute('data-i18n') === 'whatsapp_full') {
                     el.innerHTML = t[key];
                 } else {
                     el.innerHTML = t[key];
