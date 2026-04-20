@@ -65,6 +65,12 @@
         .nav-links a:hover {
             color: #E25E3A;
         }
+        .admin-link {
+            background: #f0e7e0;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
         .lang-switch {
             display: flex;
             gap: 8px;
@@ -173,6 +179,43 @@
             padding: 20px;
             margin: 15px 0;
         }
+        .admin-only {
+            display: none;
+            background: #fff3e0;
+            border-left: 4px solid #E25E3A;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+        .admin-only.show {
+            display: block;
+        }
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 32px;
+            width: 320px;
+            text-align: center;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 30px;
+            border: 1px solid #ddd;
+        }
         .country-showcase {
             display: flex;
             gap: 20px;
@@ -245,15 +288,6 @@
             .hero h1 { font-size: 2rem; }
             .nav-bar { flex-direction: column; }
         }
-        .highlight-badge {
-            background: #E25E3A;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
         .location-note {
             font-size: 0.85rem;
             color: #E25E3A;
@@ -272,6 +306,7 @@
                 <a href="#countries">当期代购</a>
                 <a href="#fees">费用说明</a>
                 <a href="#quote">询价下单</a>
+                <a href="#" id="adminLoginBtn" class="admin-link">🔐 Admin</a>
                 <div class="lang-switch">
                     <button class="lang-btn active" data-lang="zh">中文</button>
                     <button class="lang-btn" data-lang="en">English</button>
@@ -300,9 +335,7 @@
         <div class="container">
             <h2 class="section-title">💰 收费透明 · 绝不乱收</h2>
             
-            <!-- 四大收费项目 -->
             <div class="card-grid">
-                <!-- 1. 代购费 -->
                 <div class="card">
                     <div class="card-icon">🛍️</div>
                     <h3>① 代购费</h3>
@@ -317,7 +350,6 @@
                     <p style="margin-top: 10px;"><strong>📌 最低 RM15 / 订单</strong></p>
                 </div>
 
-                <!-- 2. 跑腿附加费 -->
                 <div class="card">
                     <div class="card-icon">🚶‍♀️</div>
                     <h3>② 跑腿附加费</h3>
@@ -330,7 +362,6 @@
                     <p style="font-size: 13px; margin-top: 10px;">✅ 普通零食/药妆顺路买 → 免收</p>
                 </div>
 
-                <!-- 3. 本地处理费 -->
                 <div class="card">
                     <div class="card-icon">📦</div>
                     <h3>③ 本地处理费</h3>
@@ -343,7 +374,6 @@
                 </div>
             </div>
 
-            <!-- 4. 本地邮费（单独一行） -->
             <div class="card" style="margin-top: 0;">
                 <div class="card-icon">🚚</div>
                 <h3>④ 本地邮费</h3>
@@ -351,44 +381,55 @@
                 <p>📸 提供收据，完全透明，不赚差价</p>
             </div>
 
-            <!-- 计算举例 -->
             <h3 style="margin: 40px 0 20px;">📝 完整计算举例</h3>
             
-            <div class="example-box">
+            <!-- 例1：客户看到的版本（不显示你赚多少） -->
+            <div class="example-box" id="example1">
                 <strong>📌 例1：买 RM 50 零食，面交（不用排队）</strong><br>
-                代购费（20% → RM10，取最低RM15）= RM15<br>
-                跑腿附加费 = RM0（不用排队）<br>
+                代购费 = RM15（20% → RM10，取最低RM15）<br>
+                跑腿附加费 = RM0<br>
                 本地处理费 = RM0（面交）<br>
-                <strong>💰 你收到：RM15</strong>
+                <strong>💰 客户总共付：RM15</strong>
+                <div class="admin-only" id="adminExample1">
+                    🔐 <strong>Admin 可见：你实际收到 RM15</strong>
+                </div>
             </div>
             
-            <div class="example-box">
+            <div class="example-box" id="example2">
                 <strong>📌 例2：买 RM 80 药妆，邮寄（不用排队）</strong><br>
-                代购费（80×20% = RM16）= RM16<br>
+                代购费 = RM16<br>
                 跑腿附加费 = RM0<br>
                 本地处理费 = RM10<br>
-                本地邮费（实收，假设）= RM7<br>
-                <strong>💰 客户付：RM33 | 你拿到：RM26</strong>
+                本地邮费（实收）= RM7<br>
+                <strong>💰 客户总共付：RM33</strong>
+                <div class="admin-only" id="adminExample2">
+                    🔐 <strong>Admin 可见：你实际拿到 RM26（RM33 - RM7邮费）</strong>
+                </div>
             </div>
             
-            <div class="example-box">
+            <div class="example-box" id="example3">
                 <strong>📌 例3：买 RM 400 限量球鞋，排队20分钟，邮寄</strong><br>
-                代购费（400×20% = RM80）= RM80<br>
-                跑腿附加费（中排队）= RM20<br>
+                代购费 = RM80<br>
+                跑腿附加费 = RM20<br>
                 本地处理费 = RM10<br>
-                本地邮费（实收，假设）= RM10<br>
-                <strong>💰 客户付：RM120 | 你拿到：RM110</strong>
+                本地邮费（实收）= RM10<br>
+                <strong>💰 客户总共付：RM120</strong>
+                <div class="admin-only" id="adminExample3">
+                    🔐 <strong>Admin 可见：你实际拿到 RM110（RM120 - RM10邮费）</strong>
+                </div>
             </div>
             
-            <div class="example-box">
+            <div class="example-box" id="example4">
                 <strong>📌 例4：买 RM 30 零食，专门跑一趟（不顺路），面交</strong><br>
-                代购费（20% → RM6，取RM15）= RM15<br>
-                跑腿附加费（专门去）= RM20<br>
+                代购费 = RM15（20% → RM6，取最低RM15）<br>
+                跑腿附加费 = RM20<br>
                 本地处理费 = RM0（面交）<br>
-                <strong>💰 你收到：RM35</strong>
+                <strong>💰 客户总共付：RM35</strong>
+                <div class="admin-only" id="adminExample4">
+                    🔐 <strong>Admin 可见：你实际收到 RM35</strong>
+                </div>
             </div>
 
-            <!-- 免国际运费提醒 -->
             <div style="background: #e8f0e8; border-radius: 28px; padding: 24px; margin: 30px 0; text-align: center;">
                 <p style="font-size: 1.2rem;"><strong>✈️ 人肉代购 · 免国际运费</strong></p>
                 <p>只有当你需要国际直邮时才实收国际运费</p>
@@ -434,7 +475,7 @@
 </footer>
 
 <script>
-    // 商品数据（中英文）
+    // 商品数据
     const goodsData = {
         zh: {
             japan: [
@@ -470,7 +511,23 @@
 
     let currentLang = 'zh';
     let currentCountry = 'japan';
+    let isAdmin = false;
 
+    // Admin 密码验证
+    function checkAdminPassword() {
+        const password = prompt("请输入 Admin 密码：");
+        if (password === "kk123456") {  // 你可以修改这个密码
+            isAdmin = true;
+            document.querySelectorAll('.admin-only').forEach(el => {
+                el.classList.add('show');
+            });
+            alert("Admin 模式已开启，你现在可以看到完整利润信息");
+        } else if (password !== null) {
+            alert("密码错误");
+        }
+    }
+
+    // 渲染商品
     function renderGoods() {
         const container = document.getElementById('goodsList');
         if (!container) return;
@@ -517,7 +574,12 @@
         btn.addEventListener('click', () => updateLanguage(btn.getAttribute('data-lang')));
     });
 
-    // 初始化
+    // Admin 登录按钮
+    document.getElementById('adminLoginBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        checkAdminPassword();
+    });
+
     renderGoods();
 </script>
 </body>
