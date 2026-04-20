@@ -196,6 +196,21 @@
             margin: 12px 0;
             font-size: 0.9rem;
         }
+        .rule-box {
+            background: #fff3e0;
+            border-left: 4px solid #E25E3A;
+            border-radius: 18px;
+            padding: 18px;
+            margin: 20px 0;
+        }
+        .rule-box h3 {
+            margin-bottom: 12px;
+            color: #E25E3A;
+        }
+        .rule-box p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
         .admin-only {
             display: none;
             background: #fff3e0;
@@ -271,6 +286,10 @@
             cursor: pointer;
             border: 1px solid #ffe2d4;
         }
+        .country-card.active-country {
+            border: 2px solid #E25E3A;
+            background: #fff3ec;
+        }
         .country-emoji {
             font-size: 2.5rem;
         }
@@ -278,13 +297,25 @@
             background: white;
             border-radius: 24px;
             padding: 18px;
+            max-height: 400px;
+            overflow-y: auto;
         }
         .goods-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px;
+            align-items: center;
+            padding: 12px 10px;
             border-bottom: 1px solid #f0e0d4;
             font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .goods-name {
+            font-weight: 500;
+        }
+        .goods-price {
+            color: #E25E3A;
+            font-weight: 600;
         }
         .quote-form {
             background: white;
@@ -328,41 +359,20 @@
             margin-top: 8px;
         }
         @media (max-width: 768px) {
-            .container {
-                padding: 0 16px;
-            }
-            .hero h1 {
-                font-size: 1.6rem;
-            }
-            .section-title {
-                font-size: 1.5rem;
-            }
-            .nav-bar {
-                flex-direction: column;
-                text-align: center;
-            }
-            .nav-links {
-                justify-content: center;
-            }
-            .card-grid {
-                grid-template-columns: 1fr;
-            }
-            .country-card {
-                width: 130px;
-            }
+            .container { padding: 0 16px; }
+            .hero h1 { font-size: 1.6rem; }
+            .section-title { font-size: 1.5rem; }
+            .nav-bar { flex-direction: column; text-align: center; }
+            .nav-links { justify-content: center; }
+            .card-grid { grid-template-columns: 1fr; }
+            .country-card { width: 130px; }
+            .goods-item { flex-direction: column; text-align: center; }
         }
         @media (max-width: 480px) {
-            .badge {
-                font-size: 0.75rem;
-                padding: 4px 12px;
-            }
-            .card {
-                padding: 18px 14px;
-            }
-            .example-box {
-                padding: 14px;
-                font-size: 0.85rem;
-            }
+            .badge { font-size: 0.75rem; padding: 4px 12px; }
+            .card { padding: 18px 14px; }
+            .example-box { padding: 14px; font-size: 0.85rem; }
+            .rule-box p { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -393,7 +403,7 @@
             <h1><span data-i18n="hero_title1">亲自带回 · </span><span class="highlight" data-i18n="hero_title2">跟我一起全球买</span></h1>
             <p data-i18n="hero_desc">我去日本/韩国/泰国玩的时候，帮你带回想要的东西。<br>✈️ 亲自带回 · 免国际运费 · 收费透明</p>
             <div class="badge-group">
-                <span class="badge" data-i18n="badge1">🇯🇵 日本 · 药妆零食</span>
+                <span class="badge" data-i18n="badge1">🇯🇵 日本 · 药妆/相纸/潮牌</span>
                 <span class="badge" data-i18n="badge2">🇰🇷 韩国 · 美妆潮流</span>
                 <span class="badge" data-i18n="badge3">🇹🇭 泰国 · 小物平价</span>
                 <span class="badge" data-i18n="badge4">💰 20%代购费 · 最低RM15</span>
@@ -401,6 +411,17 @@
             <a href="#quote" class="btn-primary" data-i18n="hero_btn">📝 立即询价 →</a>
         </div>
     </section>
+
+    <!-- 重要规则 -->
+    <div class="container">
+        <div class="rule-box" id="rulesBox">
+            <h3 data-i18n="rule_title">⚠️ 代购重要规则</h3>
+            <p data-i18n="rule1"><strong>① 先付款，后购买</strong><br>我会在现场拍实价给你看，你确认要 → 立即付款 → 我才帮你买。<br><span style="font-size:0.85rem; color:#E25E3A;">（我不垫付任何款项，请理解 🙏）</span></p>
+            <p data-i18n="rule2"><strong>② 代购不退还</strong><br>一旦确认下单并付款，不接受取消/退款。<br><span style="font-size:0.85rem; color:#E25E3A;">（商品本身瑕疵除外，我会当场检查）</span></p>
+            <p data-i18n="rule3"><strong>③ 若缺货，全额退款</strong><br>如果到店后商品已售完，我会立即全额退款给你。<br><span style="font-size:0.85rem; color:#E25E3A;">（你不用担心付了钱没买到）</span></p>
+            <p data-i18n="rule4"><strong>④ 行李箱空间有限，先抢先得</strong><br>每趟代购以「付款完成」为准，满单即停。</p>
+        </div>
+    </div>
 
     <section id="fees">
         <div class="container">
@@ -430,7 +451,7 @@
                         <div class="fee-row"><span data-i18n="fee2_row2">专门去 / 中排队</span><span>+ <strong>RM 20</strong></span></div>
                         <div class="fee-row"><span data-i18n="fee2_row3">很远 / 排队久</span><span>+ <strong>RM 30</strong></span></div>
                     </div>
-                    <p style="font-size: 13px;" data-i18n="fee2_note">✅ 普通零食/药妆顺路买 → 免收</p>
+                    <p style="font-size: 13px;" data-i18n="fee2_note">✅ 普通商品顺路买 → 免收</p>
                 </div>
 
                 <div class="card">
@@ -439,9 +460,7 @@
                     <p style="font-size: 1.8rem; font-weight: 700; color: #E25E3A;">RM 10</p>
                     <p data-i18n="fee3_desc">包装材料 + 开车去快递站</p>
                     <p><strong data-i18n="fee3_meet">✅ 面交 → 免收</strong></p>
-                    <div class="location-note" data-i18n="fee3_location">
-                        📍 面交仅限 <strong>大山脚 Aeon 区</strong>
-                    </div>
+                    <div class="location-note" data-i18n="fee3_location">📍 面交仅限 <strong>大山脚 Aeon 区</strong></div>
                 </div>
             </div>
 
@@ -454,55 +473,42 @@
 
             <h3 style="margin: 32px 0 16px;" data-i18n="examples_title">📝 完整计算举例</h3>
             
-            <div class="example-box" id="example1">
+            <div class="example-box">
                 <strong data-i18n="ex1_title">📌 例1：买 RM 50 零食，面交（不用排队）</strong><br>
                 <span data-i18n="ex1_fee">代购费 = RM15（20% → RM10，取最低RM15）</span><br>
                 <span data-i18n="ex1_extra">跑腿附加费 = RM0</span><br>
                 <span data-i18n="ex1_handling">本地处理费 = RM0（面交）</span><br>
                 <strong><span data-i18n="ex1_total">💰 客户总共付：RM15</span></strong>
-                <div class="admin-only" id="adminExample1">
-                    🔐 <strong data-i18n="admin_ex1">Admin 可见：你实际收到 RM15</strong>
-                </div>
+                <div class="admin-only"><strong data-i18n="admin_ex1">🔐 Admin 可见：你实际收到 RM15</strong></div>
             </div>
             
-            <div class="example-box" id="example2">
+            <div class="example-box">
                 <strong data-i18n="ex2_title">📌 例2：买 RM 80 药妆，邮寄（不用排队）</strong><br>
                 <span data-i18n="ex2_fee">代购费 = RM16</span><br>
                 <span data-i18n="ex2_extra">跑腿附加费 = RM0</span><br>
                 <span data-i18n="ex2_handling">本地处理费 = RM10</span><br>
                 <span data-i18n="ex2_post">本地邮费（实收）= RM7</span><br>
                 <strong><span data-i18n="ex2_total">💰 客户总共付：RM33</span></strong>
-                <div class="admin-only" id="adminExample2">
-                    🔐 <strong data-i18n="admin_ex2">Admin 可见：你实际拿到 RM26（RM33 - RM7邮费）</strong>
-                </div>
+                <div class="admin-only"><strong data-i18n="admin_ex2">🔐 Admin 可见：你实际拿到 RM26（RM33 - RM7邮费）</strong></div>
             </div>
             
-            <div class="example-box" id="example3">
+            <div class="example-box">
                 <strong data-i18n="ex3_title">📌 例3：买 RM 400 限量球鞋，排队20分钟，邮寄</strong><br>
                 <span data-i18n="ex3_fee">代购费 = RM80</span><br>
                 <span data-i18n="ex3_extra">跑腿附加费 = RM20</span><br>
                 <span data-i18n="ex3_handling">本地处理费 = RM10</span><br>
                 <span data-i18n="ex3_post">本地邮费（实收）= RM10</span><br>
                 <strong><span data-i18n="ex3_total">💰 客户总共付：RM120</span></strong>
-                <div class="admin-only" id="adminExample3">
-                    🔐 <strong data-i18n="admin_ex3">Admin 可见：你实际拿到 RM110（RM120 - RM10邮费）</strong>
-                </div>
+                <div class="admin-only"><strong data-i18n="admin_ex3">🔐 Admin 可见：你实际拿到 RM110（RM120 - RM10邮费）</strong></div>
             </div>
             
-            <div class="example-box" id="example4">
+            <div class="example-box">
                 <strong data-i18n="ex4_title">📌 例4：买 RM 30 零食，专门跑一趟（不顺路），面交</strong><br>
                 <span data-i18n="ex4_fee">代购费 = RM15（20% → RM6，取最低RM15）</span><br>
                 <span data-i18n="ex4_extra">跑腿附加费 = RM20</span><br>
                 <span data-i18n="ex4_handling">本地处理费 = RM0（面交）</span><br>
                 <strong><span data-i18n="ex4_total">💰 客户总共付：RM35</span></strong>
-                <div class="admin-only" id="adminExample4">
-                    🔐 <strong data-i18n="admin_ex4">Admin 可见：你实际收到 RM35</strong>
-                </div>
-            </div>
-
-            <div style="background: #e8f0e8; border-radius: 24px; padding: 20px; margin: 24px 0; text-align: center;">
-                <p style="font-size: 1.1rem;"><strong data-i18n="free_intl_title">✈️ 亲自带回 · 免国际运费</strong></p>
-                <p data-i18n="free_intl_desc">只有当你需要国际直邮时才实收国际运费</p>
+                <div class="admin-only"><strong data-i18n="admin_ex4">🔐 Admin 可见：你实际收到 RM35</strong></div>
             </div>
         </div>
     </section>
@@ -513,11 +519,11 @@
             <p style="text-align:center; margin-bottom:16px;" data-i18n="trips_date">2025.04.20 - 2025.04.28</p>
             <div class="country-showcase" id="countryTabs">
                 <div class="country-card active-country" data-country="japan"><div class="country-emoji">🇯🇵</div><div data-i18n="country_japan">日本 · 东京</div><small data-i18n="country_japan_status">进行中</small></div>
-                <div class="country-card" data-country="korea"><div class="country-emoji">🇰🇷</div><div data-i18n="country_korea">韩国 · 首尔</div><small data-i18n="country_korea_status">规划中</small></div>
-                <div class="country-card" data-country="thai"><div class="country-emoji">🇹🇭</div><div data-i18n="country_thai">泰国 · 曼谷</div><small data-i18n="country_thai_status">下一趟预告</small></div>
+                <div class="country-card" data-country="korea"><div class="country-emoji">🇰🇷</div><div data-i18n="country_korea">韩国 · 首尔</div><small data-i18n="country_korea_status">即将开放</small></div>
+                <div class="country-card" data-country="thai"><div class="country-emoji">🇹🇭</div><div data-i18n="country_thai">泰国 · 曼谷</div><small data-i18n="country_thai_status">即将开放</small></div>
             </div>
             <div class="goods-list" id="goodsList"></div>
-            <p style="font-size:12px; margin-top:10px;" data-i18n="goods_note">* 当地价格抵达后实拍确认，代购费另计</p>
+            <p style="font-size:12px; margin-top:10px;" data-i18n="goods_note">* 当地价格抵达后实拍确认，代购费另计。先付款后购买，不退还。</p>
         </div>
     </section>
 
@@ -540,7 +546,7 @@
             <a href="#" data-i18n="footer_wa">WhatsApp</a>
             <a href="#fees" data-i18n="footer_fee">收费政策</a>
         </div>
-        <p data-i18n="footer_copy">© 2025 shop_withkk 代购 | 亲自带回 · 透明收费</p>
+        <p data-i18n="footer_copy">© 2025 shop_withkk 代购 | 亲自带回 · 透明收费 · 付款后购买 · 不退还</p>
     </div>
 </footer>
 
@@ -555,36 +561,50 @@
 </div>
 
 <script>
-    // 商品数据
+    // 商品数据（可滚动）
     const goodsData = {
         zh: {
             japan: [
-                { name: "🇯🇵 药妆面膜", price: "约 ¥700-1200" },
-                { name: "🇯🇵 龙角散润喉糖", price: "约 ¥500" },
-                { name: "🇯🇵 宇治抹茶零食", price: "¥800-1500" }
+                { name: "📸 富士拍立得相纸（10张/盒）", price: "约 ¥800-1200" },
+                { name: "👟 Onitsuka Tiger Mexico 66", price: "约 ¥15,000-18,000" },
+                { name: "👟 Onitsuka Tiger 懒人鞋", price: "约 ¥12,000-15,000" },
+                { name: "🎮 任天堂Switch 游戏卡带", price: "约 ¥4,000-6,000" },
+                { name: "🧴 药妆面膜（肌美精/毛穴抚子）", price: "约 ¥700-1200" },
+                { name: "📷 Canon 拍立得相机", price: "约 ¥8,000-12,000" },
+                { name: "🧥 日系潮牌服饰（BEAMS / United Arrows）", price: "私讯询价" },
+                { name: "🍫 日本限定零食礼包", price: "约 ¥800-1500" }
             ],
             korea: [
-                { name: "🇰🇷 热门面膜", price: "₩15,000" },
-                { name: "🇰🇷 小众香膏", price: "₩12,000" }
+                { name: "🇰🇷 热门面膜（MEDIHEAL）", price: "₩15,000-25,000" },
+                { name: "🇰🇷 小众香膏（Tamburins）", price: "₩30,000-45,000" },
+                { name: "🇰🇷 潮牌帽子（MLB / emis）", price: "₩35,000-50,000" }
             ],
             thai: [
-                { name: "🇹🇭 鼻通棒", price: "฿180" },
-                { name: "🇹🇭 牛奶洗面奶", price: "฿139" }
+                { name: "🇹🇭 鼻通棒（6支装）", price: "฿180-250" },
+                { name: "🇹🇭 牛奶洗面奶（Scentio）", price: "฿139-180" },
+                { name: "🇹🇭 泰国限定Pocky", price: "฿50-100" }
             ]
         },
         en: {
             japan: [
-                { name: "🇯🇵 Sheet Mask", price: "~¥700-1200" },
-                { name: "🇯🇵 Herbal Candy", price: "~¥500" },
-                { name: "🇯🇵 Matcha Snacks", price: "¥800-1500" }
+                { name: "📸 Fujifilm Instax Film (10 sheets)", price: "~¥800-1200" },
+                { name: "👟 Onitsuka Tiger Mexico 66", price: "~¥15,000-18,000" },
+                { name: "👟 Onitsuka Tiger Slip-on", price: "~¥12,000-15,000" },
+                { name: "🎮 Nintendo Switch Game Card", price: "~¥4,000-6,000" },
+                { name: "🧴 Sheet Mask (Hada Labo)", price: "~¥700-1200" },
+                { name: "📷 Canon Instax Camera", price: "~¥8,000-12,000" },
+                { name: "🧥 Japanese Streetwear", price: "DM for price" },
+                { name: "🍫 Japan Limited Snacks", price: "~¥800-1500" }
             ],
             korea: [
-                { name: "🇰🇷 Face Mask", price: "₩15,000" },
-                { name: "🇰🇷 Perfume Balm", price: "₩12,000" }
+                { name: "🇰🇷 Face Mask (MEDIHEAL)", price: "₩15,000-25,000" },
+                { name: "🇰🇷 Perfume Balm (Tamburins)", price: "₩30,000-45,000" },
+                { name: "🇰🇷 Cap (MLB / emis)", price: "₩35,000-50,000" }
             ],
             thai: [
-                { name: "🇹🇭 Nasal Stick", price: "~฿180" },
-                { name: "🇹🇭 Milk Cleanser", price: "฿139" }
+                { name: "🇹🇭 Nasal Stick (6pcs)", price: "~฿180-250" },
+                { name: "🇹🇭 Milk Cleanser (Scentio)", price: "~฿139-180" },
+                { name: "🇹🇭 Thailand Pocky", price: "~฿50-100" }
             ]
         }
     };
@@ -593,13 +613,19 @@
     const translations = {
         zh: {
             nav_home: "首页", nav_trips: "当期代购", nav_fees: "费用说明", nav_quote: "询价下单", nav_admin: "🔐 Admin",
-            hero_title1: "亲自带回 · ", hero_title2: "跟我一起全球买", hero_desc: "我去日本/韩国/泰国玩的时候，帮你带回想要的东西。\n✈️ 亲自带回 · 免国际运费 · 收费透明",
+            hero_title1: "亲自带回 · ", hero_title2: "跟我一起全球买",
+            hero_desc: "我去日本/韩国/泰国玩的时候，帮你带回想要的东西。\n✈️ 亲自带回 · 免国际运费 · 收费透明",
             hero_btn: "📝 立即询价 →",
-            badge1: "🇯🇵 日本 · 药妆零食", badge2: "🇰🇷 韩国 · 美妆潮流", badge3: "🇹🇭 泰国 · 小物平价", badge4: "💰 20%代购费 · 最低RM15",
+            badge1: "🇯🇵 日本 · 药妆/相纸/潮牌", badge2: "🇰🇷 韩国 · 美妆潮流", badge3: "🇹🇭 泰国 · 小物平价", badge4: "💰 20%代购费 · 最低RM15",
+            rule_title: "⚠️ 代购重要规则",
+            rule1: "① 先付款，后购买\n我会在现场拍实价给你看，你确认要 → 立即付款 → 我才帮你买。\n（我不垫付任何款项，请理解 🙏）",
+            rule2: "② 代购不退还\n一旦确认下单并付款，不接受取消/退款。\n（商品本身瑕疵除外，我会当场检查）",
+            rule3: "③ 若缺货，全额退款\n如果到店后商品已售完，我会立即全额退款给你。\n（你不用担心付了钱没买到）",
+            rule4: "④ 行李箱空间有限，先抢先得\n每趟代购以「付款完成」为准，满单即停。",
             fee_title: "💰 收费透明 · 绝不乱收",
             fee1_title: "① 代购费", fee1_desc: "商品当地总价 × 20%", fee1_min: "📌 最低 RM15 / 订单",
             fee1_row1: "RM 10 商品", fee1_row2: "RM 50 商品", fee1_row3: "RM 100 商品", fee1_row4: "RM 300 商品",
-            fee2_title: "② 跑腿附加费", fee2_sub: "只有排队/限量/专门找才收", fee2_row1: "顺路 / 小排队", fee2_row2: "专门去 / 中排队", fee2_row3: "很远 / 排队久", fee2_note: "✅ 普通零食/药妆顺路买 → 免收",
+            fee2_title: "② 跑腿附加费", fee2_sub: "只有排队/限量/专门找才收", fee2_row1: "顺路 / 小排队", fee2_row2: "专门去 / 中排队", fee2_row3: "很远 / 排队久", fee2_note: "✅ 普通商品顺路买 → 免收",
             fee3_title: "③ 本地处理费", fee3_desc: "包装材料 + 开车去快递站", fee3_meet: "✅ 面交 → 免收", fee3_location: "📍 面交仅限 大山脚 Aeon 区",
             fee4_title: "④ 本地邮费", fee4_desc: "按快递公司实收（PosLaju / J&T）", fee4_receipt: "📸 提供收据，完全透明，不赚差价",
             examples_title: "📝 完整计算举例",
@@ -607,20 +633,25 @@
             ex2_title: "📌 例2：买 RM 80 药妆，邮寄（不用排队）", ex2_fee: "代购费 = RM16", ex2_extra: "跑腿附加费 = RM0", ex2_handling: "本地处理费 = RM10", ex2_post: "本地邮费（实收）= RM7", ex2_total: "💰 客户总共付：RM33",
             ex3_title: "📌 例3：买 RM 400 限量球鞋，排队20分钟，邮寄", ex3_fee: "代购费 = RM80", ex3_extra: "跑腿附加费 = RM20", ex3_handling: "本地处理费 = RM10", ex3_post: "本地邮费（实收）= RM10", ex3_total: "💰 客户总共付：RM120",
             ex4_title: "📌 例4：买 RM 30 零食，专门跑一趟（不顺路），面交", ex4_fee: "代购费 = RM15（20% → RM6，取最低RM15）", ex4_extra: "跑腿附加费 = RM20", ex4_handling: "本地处理费 = RM0（面交）", ex4_total: "💰 客户总共付：RM35",
-            admin_ex1: "Admin 可见：你实际收到 RM15", admin_ex2: "Admin 可见：你实际拿到 RM26（RM33 - RM7邮费）", admin_ex3: "Admin 可见：你实际拿到 RM110（RM120 - RM10邮费）", admin_ex4: "Admin 可见：你实际收到 RM35",
-            free_intl_title: "✈️ 亲自带回 · 免国际运费", free_intl_desc: "只有当你需要国际直邮时才实收国际运费",
+            admin_ex1: "🔐 Admin 可见：你实际收到 RM15", admin_ex2: "🔐 Admin 可见：你实际拿到 RM26（RM33 - RM7邮费）", admin_ex3: "🔐 Admin 可见：你实际拿到 RM110（RM120 - RM10邮费）", admin_ex4: "🔐 Admin 可见：你实际收到 RM35",
             trips_title: "🗺️ 当期代购 · 日本东京", trips_date: "2025.04.20 - 2025.04.28",
-            country_japan: "日本 · 东京", country_japan_status: "进行中", country_korea: "韩国 · 首尔", country_korea_status: "规划中", country_thai: "泰国 · 曼谷", country_thai_status: "下一趟预告",
-            goods_note: "* 当地价格抵达后实拍确认，代购费另计",
+            country_japan: "日本 · 东京", country_japan_status: "进行中", country_korea: "韩国 · 首尔", country_korea_status: "即将开放", country_thai: "泰国 · 曼谷", country_thai_status: "即将开放",
+            goods_note: "* 当地价格抵达后实拍确认，代购费另计。先付款后购买，不退还。",
             quote_title: "📋 询价 / 下单", quote_desc: "📩 直接私讯我，我会在24小时内回复报价", quote_btn: "📱 私讯 Instagram @shop_withkk", quote_wa: "或者 WhatsApp: 012-3456789（你的号码）",
-            footer_ig: "Instagram", footer_wa: "WhatsApp", footer_fee: "收费政策", footer_copy: "© 2025 shop_withkk 代购 | 亲自带回 · 透明收费",
+            footer_ig: "Instagram", footer_wa: "WhatsApp", footer_fee: "收费政策", footer_copy: "© 2025 shop_withkk 代购 | 亲自带回 · 透明收费 · 付款后购买 · 不退还",
             modal_title: "🔐 Admin 验证", modal_desc: "请输入密码以查看完整利润信息", modal_confirm: "确认", modal_cancel: "取消"
         },
         en: {
             nav_home: "Home", nav_trips: "Current Trips", nav_fees: "Pricing", nav_quote: "Inquiry", nav_admin: "🔐 Admin",
-            hero_title1: "Personal Shopper · ", hero_title2: "Shop With Me", hero_desc: "I bring items back when traveling to Japan/Korea/Thailand.\n✈️ Hand-carried · No International Shipping Fee · Transparent Pricing",
+            hero_title1: "Personal Shopper · ", hero_title2: "Shop With Me",
+            hero_desc: "I bring items back when traveling to Japan/Korea/Thailand.\n✈️ Hand-carried · No International Shipping Fee · Transparent Pricing",
             hero_btn: "📝 Request Quote →",
-            badge1: "🇯🇵 Japan · Skincare & Snacks", badge2: "🇰🇷 Korea · Beauty & Trends", badge3: "🇹🇭 Thailand · Affordable Finds", badge4: "💰 20% Service Fee · Min RM15",
+            badge1: "🇯🇵 Japan · Skincare/Instax/Streetwear", badge2: "🇰🇷 Korea · Beauty & Trends", badge3: "🇹🇭 Thailand · Affordable Finds", badge4: "💰 20% Service Fee · Min RM15",
+            rule_title: "⚠️ Important Rules",
+            rule1: "① Pay first, then purchase\nI'll send you the real price in-store. You confirm → pay immediately → I buy.\n(I don't advance payment 🙏)",
+            rule2: "② No refunds or cancellations\nOnce you confirm and pay, no cancellation or refund.\n(Except defective items, I will check on the spot)",
+            rule3: "③ Full refund if out of stock\nIf the item is sold out, I will refund you immediately.\n(You won't lose money)",
+            rule4: "④ First pay, first serve\nLimited luggage space. Priority based on payment completion.",
             fee_title: "💰 Clear Pricing · No Hidden Fees",
             fee1_title: "① Service Fee", fee1_desc: "20% of local price", fee1_min: "📌 Min RM15 per order",
             fee1_row1: "RM10 item", fee1_row2: "RM50 item", fee1_row3: "RM100 item", fee1_row4: "RM300 item",
@@ -633,12 +664,11 @@
             ex3_title: "📌 Example 3: RM400 limited shoes, queue 20min, shipping", ex3_fee: "Service fee = RM80", ex3_extra: "Travel fee = RM20", ex3_handling: "Handling fee = RM10", ex3_post: "Shipping fee = RM10", ex3_total: "💰 Customer pays: RM120",
             ex4_title: "📌 Example 4: RM30 snacks, special trip, meet-up", ex4_fee: "Service fee = RM15 (20% of RM6 → min RM15)", ex4_extra: "Travel fee = RM20", ex4_handling: "Handling fee = RM0 (meet-up)", ex4_total: "💰 Customer pays: RM35",
             admin_ex1: "🔐 Admin: You receive RM15", admin_ex2: "🔐 Admin: You receive RM26 (RM33 - RM7 shipping)", admin_ex3: "🔐 Admin: You receive RM110 (RM120 - RM10 shipping)", admin_ex4: "🔐 Admin: You receive RM35",
-            free_intl_title: "✈️ Hand-carried · No International Shipping Fee", free_intl_desc: "International shipping only charged if you need direct shipping",
             trips_title: "🗺️ Current Trip · Tokyo, Japan", trips_date: "Apr 20 - 28, 2025",
-            country_japan: "Tokyo, Japan", country_japan_status: "Ongoing", country_korea: "Seoul, Korea", country_korea_status: "Planning", country_thai: "Bangkok, Thailand", country_thai_status: "Next Trip",
-            goods_note: "* Final price confirmed in-store, service fee extra",
+            country_japan: "Tokyo, Japan", country_japan_status: "Ongoing", country_korea: "Seoul, Korea", country_korea_status: "Coming Soon", country_thai: "Bangkok, Thailand", country_thai_status: "Coming Soon",
+            goods_note: "* Final price confirmed in-store, service fee extra. Pay first, no refunds.",
             quote_title: "📋 Inquiry / Order", quote_desc: "📩 DM me, I'll reply within 24h with a quote", quote_btn: "📱 DM Instagram @shop_withkk", quote_wa: "Or WhatsApp: 012-3456789",
-            footer_ig: "Instagram", footer_wa: "WhatsApp", footer_fee: "Pricing Policy", footer_copy: "© 2025 shop_withkk | Hand-carried · Transparent Pricing",
+            footer_ig: "Instagram", footer_wa: "WhatsApp", footer_fee: "Pricing Policy", footer_copy: "© 2025 shop_withkk | Hand-carried · Transparent · Pay first · No refunds",
             modal_title: "🔐 Admin Verification", modal_desc: "Enter password to view profit details", modal_confirm: "Confirm", modal_cancel: "Cancel"
         }
     };
@@ -671,13 +701,13 @@
         if (!data) return;
         
         let countryName = '';
-        if (currentCountry === 'japan') countryName = currentLang === 'zh' ? '日本东京 热门代购' : 'Tokyo, Japan - Popular Items';
-        else if (currentCountry === 'korea') countryName = currentLang === 'zh' ? '韩国首尔 人气商品' : 'Seoul, Korea - Popular Items';
-        else countryName = currentLang === 'zh' ? '泰国曼谷 必买清单' : 'Bangkok, Thailand - Must Buy';
+        if (currentCountry === 'japan') countryName = currentLang === 'zh' ? '✨ 日本东京 热门代购' : '✨ Tokyo, Japan - Popular Items';
+        else if (currentCountry === 'korea') countryName = currentLang === 'zh' ? '✨ 韩国首尔 人气商品' : '✨ Seoul, Korea - Popular Items';
+        else countryName = currentLang === 'zh' ? '✨ 泰国曼谷 必买清单' : '✨ Bangkok, Thailand - Must Buy';
         
-        let html = `<h3>✨ ${countryName}</h3>`;
+        let html = `<h3>${countryName}</h3>`;
         data.forEach(item => {
-            html += `<div class="goods-item"><span>${item.name}</span><span>${item.price}</span></div>`;
+            html += `<div class="goods-item"><span class="goods-name">${item.name}</span><span class="goods-price">${item.price}</span></div>`;
         });
         html += `<p style="margin-top:10px;">💬 ${currentLang === 'zh' ? '代购费 = 商品价 × 20%（最低RM15）' : 'Service fee = 20% of item price (Min RM15)'}</p>`;
         container.innerHTML = html;
